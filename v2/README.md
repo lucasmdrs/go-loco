@@ -1,8 +1,6 @@
-## go-loco
+## go-loco v2
 
 A simple lib to fetch translation files from [Localise](https://localise.biz/) and save it in a [go-i18n](https://github.com/nicksnyder/go-i18n) compatible format.
-
-Checkout the [V2](./v2) for multiple projects and automatic assets update.
 
 ## Usage
 
@@ -10,6 +8,7 @@ Checkout the [V2](./v2) for multiple projects and automatic assets update.
 package main
 
 import (
+	"context"
 	"fmt"
 
 	loco "github.com/lucasmdrs/go-loco"
@@ -17,10 +16,13 @@ import (
 )
 
 func main() {
-	err := loco.FetchTranslations("MY_LOCALISE_KEY", "./", "pt-BR", "en-US")
-	if err != nil {
+	g := Init()
+
+	if err := g.AddProject("MY_LOCALISE_KEY", "./"); err != nil {
 		panic(err)
 	}
+
+	g.FetchTranslations(context.TODO())
 
 	i18n.MustLoadTranslationFile("en-US.json")
 	i18n.MustLoadTranslationFile("pt-BR.json")
